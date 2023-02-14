@@ -14,16 +14,15 @@ import json
 import pytest
 
 
-
-
 # Test variables
 good_users = ["bax1", "Bax2", "admin", " spaces1 ", "Åäö20", "longUserID01234567890123456789"]
 good_passwords = ["Bax1#", "2aX#", "Bax3%", "40bAx?", "20Åäö&", "LongPass##012345"]
 bad_users = ["", "richard", "adam1@", "baxen1#", "pat rik", "tooLongID0123456789012345678901"]
 bad_passwords = ["", "P1#", "password1#", "Password#", "Pass word1#", "TooLongPass#34567"]
+
 # Invoke Chrome
-options_chrome = ChromeOptions()
 # Experimental option to keep webpage open during development
+#options_chrome = ChromeOptions()
 #options_chrome.add_experimental_option("detach", True)
 #driver_chrome = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options_chrome)
 driver_chrome = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
@@ -107,14 +106,14 @@ def test_6_three_bad_attempts():
             WebDriverWait(driver_chrome, 2).until(EC.alert_is_present())
             alert = driver_chrome.switch_to.alert
             alert.accept()
-            text += f'Good user: {good_users[5]} with bad pass: {good_passwords[i]}\n'
+            text += f'Good user: {good_users[5]} with bad pass: {bad_passwords[i]}\n'
         except TimeoutException:
             continue
     assert text != '', text
     # Check DB minus one
     users_json = driver_chrome.execute_script('return getUsers()')
     user_data = json.loads(users_json)
-    assert len(good_users) -1 == len(user_data), "Checking good_users against usersDB"
+    assert len(good_users) -1 == len(user_data), "Checking list good_users against usersDB"
 
 def test_7_admin():
     driver_chrome.find_element(By.ID, "reset").click()
