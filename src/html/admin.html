@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <style>
+        table, th, td {
+        border: 1px solid rgb(66, 66, 66);
+        }
+    </style>
+</head>
+<body>
+    <center><h1>Admin page</h1></center>
+    <center><button id="helpAdmin" name="helpAdmin"> Help </button></center>
+    <center><h3 id="testOutput"></h3></center><!-- For testing-->
+    <br><br><br><br>
+    <button id="displayDB" type="button">Display Current DataBase</button>
+    <button id="logout" type="button">Logout</button>
+    <button id="updateEntry" type="button">Update Database Entry</button>
+    <button id="deleteEntry" type="button">Delete Database Entry</button>
+    <button id="deleteEverything" type="button">Delete Everything</button>
+    <br><br>
+    <div style="background-color: rgb(185, 184, 184); color: rgb(5, 5, 5); padding: 1px;">
+        <table id="tableDB"></table>
+      </div>
+    
+
+    <script src="../js/promptText.js"></script>
+    <script src="../js/admin.js"></script>
+    
+</body>
+</html>

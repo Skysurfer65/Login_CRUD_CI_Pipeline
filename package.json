@@ -1,0 +1,16 @@
+{
+  "name": "tests",
+  "version": "1.0.0",
+  "description": "Richard Fehling, student at EC Utbildning, MVT22<br/>\r richard.fehling@learnet.se",
+  "main": "./tests/classUser.test.js",
+  "scripts": {
+    "test": "jest",
+    "testcov": "jest --coverage"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^27.4.2"
+  }
+}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+        <!--GUI login (form)-->
+        <br><br>
+        <center><button id="help" name="help"> Help </button></center>
+        <br><br>
+        <center>
+        <table bgcolor="lightgray" cellpadding="12" border="6">
+            <tr>
+                <td colspan="2">
+                    <center><h1><i><b><p id="header">Login</p></b></i></h1></center>
+                </td>
+            </tr>
+            <tr>
+                <td><h1><i><b>UserID:</b></i></h1></td>
+                <td><form id="login" name="login">
+                    <label for="userID"></label><input id="userID" name="userID" type="text"></td>
+            </tr>
+            <tr>
+                <td><h1><i><b>Password:</b></i></h1></td>
+                <td><label for="password"></label><input id="password" name="password" type="password"></td>
+            </tr>
+            <tr>
+                <td><center><input id="actionButton" type="button" value="login" onClick="this.form"></center></td>
+                <td><center><input id="reset" type="Reset" value="Reset"></center>
+                </form></td>
+            </tr>
+        </table>
+        </center>
+        <br><br>
+        <center><input id="createOrLogin" type="button" value="Create Account"></center>
+        <center><h2 id="output1"></h2></center>
+        <center><p id="output2"></p></center>
+
+    <script src="../js/errors.js"></script>
+    <script src="../js/index.js"></script>
+    <script src="../js/classUser.js"></script>
+    
+</body>
+</html>
