@@ -1,11 +1,11 @@
-# Login_CRUD_CI
-## Login with admin CRUD. Javascript and HTML. Tested with JEST in GitHub Actions.
+# Login_CRUD_CI_Pipeline WIP
+## Login with admin CRUD. Javascript and HTML. Tested with JEST and Selenium in GitHub Actions.
 
 # Continous Integration
-In this setup I'm trying to get GitHub Actions to automate my JEST tests
-when the user push to the repository. Since javascript is a scripted language
-that needs an environment to be interpret (as it's normally done in the browser),
-I have to setup my VM to run Node. In this simulated back-end mode I can run my tests.
+In this setup I'm trying to get GitHub Actions to automate my tests
+when the user push to the repository.<br/>
+Unit and integrationtests are done on the javascript with **JEST** test package. Since javascript is a scripted language that needs an environment to be interpret (as it's normally done in the browser), I have to setup my VM to run Node. In this simulated back-end mode I can run my tests.
+UI tests are done directly on the DOM by using **Selenium** to automate and **pytest** for assertions. This part of the project is written in **Python**. 
 To see testresults you need to look into the logfiles under Actions.
 
 -------------------------------------------------------------------------------------
