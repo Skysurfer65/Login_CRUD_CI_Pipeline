@@ -90,7 +90,33 @@ def test_5_login_users():
             continue
     assert text == '', text
 
-def test_6_admin():
+def test_6_three_bad_attempts():
+    # function variables
+    text = ''  
+    # Login, good_user with 3 bad_passwords
+    for i in range(3):
+        # Reset login page
+        driver_chrome.find_element(By.ID, "reset").click()
+        # Set user
+        driver_chrome.find_element(By.ID, "userID").send_keys(good_users[5])
+        # Set bad password
+        driver_chrome.find_element(By.ID, "password").send_keys(bad_passwords[i])
+        # Login
+        driver_chrome.find_element(By.ID, "actionButton").click()
+        try:
+            WebDriverWait(driver_chrome, 2).until(EC.alert_is_present())
+            alert = driver_chrome.switch_to.alert
+            alert.accept()
+            text += f'Good user: {good_users[5]} with bad pass: {good_passwords[i]}\n'
+        except TimeoutException:
+            continue
+    assert text != '', text
+    # Check DB minus one
+    users_json = driver_chrome.execute_script('return getUsers()')
+    user_data = json.loads(users_json)
+    assert len(good_users) -1 == len(user_data), "Checking good_users against usersDB"
+
+def test_7_admin():
     driver_chrome.find_element(By.ID, "reset").click()
     # Set user admin index 2 in good_users
     driver_chrome.find_element(By.ID, "userID").send_keys(good_users[2])
@@ -101,7 +127,7 @@ def test_6_admin():
     title_chrome = driver_chrome.title
     assert title_chrome == "Admin", "Wrong page title"
 
-def test_7_admin_update():
+def test_8_admin_update():
     # On admin page from previous test
     driver_chrome.find_element(By.ID, "displayDB").click()
     user_id_2 = driver_chrome.find_element(By.XPATH, '//*[@id="tableDB"]/tr[4]/td[2]')
@@ -126,7 +152,7 @@ def test_7_admin_update():
     # Check newadmin1 as admin name
     assert 'newadmin1' == user_id_2.text
 
-def test_8_user_update():
+def test_9_user_update():
     # On admin page from previuos test and refresh
     driver_chrome.refresh()
     # Choose update
@@ -146,7 +172,7 @@ def test_8_user_update():
     # Check baluba1 as new user name
     assert 'baluba1' == user_id_0.text
 
-def test_9_admin_delete_all():
+def test_10_admin_delete_all():
     driver_chrome.find_element(By.ID, "deleteEverything").click()
     try:
         WebDriverWait(driver_chrome, 2).until(EC.alert_is_present())
@@ -156,7 +182,7 @@ def test_9_admin_delete_all():
     except TimeoutException:
         assert False, "No delete all Alert shown"
     
-def test_10_empty_DB():
+def test_11_empty_DB():
     # Return to start page
     driver_chrome.find_element(By.ID, "logout").click()
     # Check empty DB
@@ -164,7 +190,7 @@ def test_10_empty_DB():
     user_data = json.loads(users_json)
     assert 0 == len(user_data)
 
-def test_11_create_bad_users():
+def test_12_create_bad_users():
     # Test bad usernames with good passwords
     # function variables
     text = ''
@@ -187,7 +213,7 @@ def test_11_create_bad_users():
             text += f'No Alert for user: {bad_users[i]} with pass: {good_passwords[i]}\n'
     assert text == '', text    
 
-def test_12_create_bad_passwords():
+def test_13_create_bad_passwords():
     # Test good usernames with bad passwords
     # function variables
     text = ''
@@ -208,7 +234,7 @@ def test_12_create_bad_passwords():
             text += f'No Alert for user: {good_users[i]} with pass: {bad_passwords[i]}\n'
     assert text == '', text 
 
-def test_13_empty_DB_and_teardown():
+def test_14_empty_DB_and_teardown():
     # Check empty DB
     users_json = driver_chrome.execute_script('return getUsers()')
     user_data = json.loads(users_json)
