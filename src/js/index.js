@@ -78,7 +78,7 @@ function login() {
         if (!user.checkUserInDB(users) && user.validateUserID(adminID) && user.validatePassword()){
             //Add to user ArrayList
             user.addUserToUsers();
-            output1.innerHTML = "Login credentials<br>succesfully created!";
+            output1.innerHTML = "Login credentials<br>successfully created!";
         } else alert(errors(1));
 
     } else {
@@ -181,3 +181,15 @@ function getUsers(){
     getUsersStr = JSON.stringify(users, null, 1);
     return getUsersStr;
 }
+
+/**
+ * @function deleteAll
+ * @description Experimental function for Selenium (måste köras med js executor)
+ */
+function deleteEverything(){
+    //Delete database
+    localStorage.removeItem("myLoginDB");
+    //Delete stored new admin User ID
+    localStorage.removeItem("newAdminID");
+}
+
