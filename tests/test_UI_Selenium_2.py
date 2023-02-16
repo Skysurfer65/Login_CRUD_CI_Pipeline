@@ -17,7 +17,7 @@ from time import sleep
 from ass_loc_func_Selenium import Assertions, Locators, Functions
 
 ### Test variabels and constants ##################################################################
-good_users = ["bax1", "Bax2", "admi1", " spaces1 ", "Åäö20", "longUserID01234567890123456789"]
+good_users = ["bax1", "Bax2", "admin", " spaces1 ", "Åäö20", "longUserID01234567890123456789"]
 good_passwords = ["Bax1#", "2aX#", "Bax3%", "40bAx?", "20Åäö&", "LongPass##012345"]
 bad_users = ["", "richard", "adam1@", "baxen1#", "pat rik", "tooLongID0123456789012345678901"]
 bad_passwords = ["", "P1#", "password1#", "Password#", "Pass word1#", "TooLongPass#34567"]
@@ -161,8 +161,12 @@ class Testcase3(BasicTest):
         self.delete_everything_selenium()
         self.function_teardown()
 
-        
+    # Three bad login attempts
+    def test_3_bad_login_attempts():
+        pass    
 
-    
+class Testcase4(BasicTest):
+    # Test admin page
+    pass   
 
 

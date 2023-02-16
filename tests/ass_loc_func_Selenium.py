@@ -50,11 +50,15 @@ class Functions:
                 alert.accept()
                 text += f'Bad user: {users[i]}, or bad pass: {passwords[i]}\n'
             except TimeoutException:
-                text_frame = driver.find_element(*loc.OUTPUT_1).get_attribute('innerHTML')
-                if 'successfully' or 'CORRECT' in text_frame:
+                try:
+                    WebDriverWait(driver, 0).until(lambda d: d.find_element(*loc.OUTPUT_1))
+                    text_frame = driver.find_element(*loc.OUTPUT_1).get_attribute('innerHTML')
+                except TimeoutException:
+                    page_title = driver.title
+                    driver.find_element(*loc.LOGOUT).click()
+                if ('successfully' or 'CORRECT' in text_frame) or ('Admin' in page_title):
                     success = True
                 continue
-        #if text != '': success = False 
         return text, success
     
     def get_users(self, object):
