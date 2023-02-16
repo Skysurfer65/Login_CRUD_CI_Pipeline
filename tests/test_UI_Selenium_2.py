@@ -31,6 +31,7 @@ find = Locators()
 func = Functions()
 ####################################################################################################
 
+# Setup for webdrivers, scope set to class
 @pytest.fixture(params=["chrome"],scope="class")
 def invoke_driver(request):
     print('Class setup')
@@ -46,7 +47,9 @@ def invoke_driver(request):
 
 @pytest.mark.usefixtures("invoke_driver")
 class BasicTest:
-    # To be able to choose driver use and setups for test classes
+    # This is a parent class for setups/teardowns and 
+    # to be able to choose different drivers or no driver
+    # for testcases/classes
     def function_setup(self):
         print('Function setup')
         self.driver.get("file:///" + LOGIN_HTML)
@@ -58,7 +61,7 @@ class BasicTest:
     def delete_everything_selenium(self):
         self.driver.execute_script('deleteEverythingSelenium()')
     
-
+#Testcase-1-Basic-startup-and-deletes---------------------------------------------------------------
 class Testcase1(BasicTest):
     # Function for development
     def to_find_driver_functions(self):
@@ -81,11 +84,12 @@ class Testcase1(BasicTest):
     def test_3_check_DB_empty(self):
         self.function_setup()
         print('Check empty database')
-        self.delete_everything_selenium()
+        #self.delete_everything_selenium()
         user_data = func.get_users(self.driver)
         my.assert_equal(0, len(user_data), "Users array not empty")
         self.function_teardown()
 
+#Testcase-2-Creation-of-users-and-check-DB------------------------------------------------------------
 class Testcase2(BasicTest):
     # Create good users with good passwords
     def test_1_create_users(self):
@@ -99,17 +103,19 @@ class Testcase2(BasicTest):
         text, success = func.create_or_login_users(self.driver, good_users, good_passwords)      
         # Assert, check no errors but success
         my.assert_equal('', text, text)
-        my.boolean_assert(success, 'No CREATE or Login success')
-        # Cleanup   
+        my.boolean_assert(success, 'No CREATE or Login success')  
         self.function_teardown()
-
+    
+    # Check results in DB
     def test_2_usersDB(self):
         self.function_setup()
         user_data = func.get_users(self.driver)
         my.assert_equal(len(good_users), len(user_data), "Testdata and database not equal")
+        # Cleanup
         self.delete_everything_selenium()
         self.function_teardown()
 
+#Testcase-3-Logins-good-and-bad----------------------------------------------------------------------
 class Testcase3(BasicTest):
     # Login good users
     def test_1_login_good_users(self):
@@ -122,7 +128,9 @@ class Testcase3(BasicTest):
         # Act, goto login and login
         self.driver.find_element(*find.CREATE_OR_LOGIN).click()
         text, success = func.create_or_login_users(self.driver, good_users, good_passwords)
+        # Assert
         my.boolean_assert(success, text)
+        # Cleanup
         self.delete_everything_selenium()
         self.function_teardown()
 
@@ -137,9 +145,11 @@ class Testcase3(BasicTest):
         # Act, goto login and login
         self.driver.find_element(*find.CREATE_OR_LOGIN).click()
         text, success = func.create_or_login_users(self.driver, good_users, bad_passwords)
+        # Assert
         my.assert_not_equal('', text, "No login errors!?")
         print(text)
         my.boolean_assert(not success, 'One or more logins had no errors')
+        # Cleanup
         self.delete_everything_selenium()
         self.function_teardown()
 
@@ -148,7 +158,7 @@ class Testcase3(BasicTest):
     def test_2_login_bad_users_with_good_pass(self):
         # Arrange
         self.function_setup()
-        print('Good users with bad pass login')
+        print('Bad users with good pass login')
         # Goto create user and add users
         self.driver.find_element(*find.CREATE_OR_LOGIN).click()
         func.create_or_login_users(self.driver, good_users, good_passwords)
@@ -162,11 +172,13 @@ class Testcase3(BasicTest):
         self.function_teardown()
 
     # Three bad login attempts
-    def test_3_bad_login_attempts():
-        pass    
+    def test_3_bad_login_attempts(self):
+        pass  
 
+#Testcase-4-Admin-and-CRUD-functions-----------------------------------------------------------------
 class Testcase4(BasicTest):
     # Test admin page
+    #source "venv/Scripts/activate"
     pass   
 
 
