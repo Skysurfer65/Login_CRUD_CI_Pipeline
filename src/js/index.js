@@ -183,13 +183,15 @@ function getUsers(){
 }
 
 /**
- * @function deleteAll
+ * @function deleteEverythingSelenium
  * @description Experimental function for Selenium (måste köras med js executor)
  */
-function deleteEverything(){
+function deleteEverythingSelenium(){
     //Delete database
     localStorage.removeItem("myLoginDB");
     //Delete stored new admin User ID
     localStorage.removeItem("newAdminID");
+    //Delete users in users array
+    users.length = 0;
 }
 
