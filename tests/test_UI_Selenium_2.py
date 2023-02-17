@@ -121,7 +121,7 @@ class Testcase3(BasicTest):
     def test_1_login_good_users(self):
         # Arrange
         self.function_setup()
-        print('Good users login')
+        print('Good users and passwords login')
         # Goto create user and add users
         self.driver.find_element(*find.CREATE_OR_LOGIN).click()
         func.create_or_login_users(self.driver, good_users, good_passwords)

@@ -1,6 +1,6 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, UnexpectedAlertPresentException, NoSuchElementException, NoAlertPresentException
 from selenium.webdriver.support import expected_conditions as EC
 import json
 
@@ -61,6 +61,49 @@ class Functions:
                 continue
         return text, success
     
+    def create_or_login_users_WIP(self, object, users, passwords):
+        driver = object
+        loc = Locators()
+        text = ''
+        success = False
+        for i in range(len(users)):
+            driver.find_element(*loc.RESET).click()
+            # Set user
+            driver.find_element(*loc.USER_ID).send_keys(users[i])
+            # Set password
+            driver.find_element(*loc.PASSWORD).send_keys(passwords[i])
+            
+            try:
+                # Create or login
+                driver.find_element(*loc.ACTION_BUTTON).click() 
+                WebDriverWait(driver, 0).until(lambda d: d.find_element(*loc.OUTPUT_1))
+                # If success
+                #text_frame = driver.find_element(*loc.OUTPUT_1).get_attribute('innerHTML')
+            except UnexpectedAlertPresentException:
+                alert = driver.switch_to.alert
+                alert.accept()
+            except TimeoutError:
+                pass   
+                
+            '''
+            except Exception as e: 
+                
+                if e == UnexpectedAlertPresentException: # Something went wrong
+                    alert = driver.switch_to.alert
+                    alert.accept()
+                    text += f'Bad user: {users[i]}, or bad pass: {passwords[i]}\n'
+                elif e.__class__ == TimeoutException: # Admin page
+                    page_title = driver.title
+                    driver.find_element(*loc.LOGOUT).click()
+                else: # Some other Exception
+                    print(e)
+                '''
+                
+
+            #if ('successfully' or 'CORRECT' in text_frame) or ('Admin' in page_title):
+                #success = True             
+        return text, success
+
     def get_users(self, object):
         driver = object
         users_json = driver.execute_script('return getUsers()')
