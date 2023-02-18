@@ -38,4 +38,4 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Selenium test with pytest as testrunner
       run: |
-        python -rA tests/test_UI_Selenium_2.py
+        python -q tests/test_UI_Selenium_2.py
