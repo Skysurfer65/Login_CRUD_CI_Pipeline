@@ -13,6 +13,34 @@ permissions:
   contents: read
 
 jobs:
+
+  JEST_unittests:
+    name: JEST unittests
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build --if-present
+      # Coverage added
+    - run: npm test -- --coverage
+
+  Selenium_run:
+    name: Selenium run
+    
   build:
 
     runs-on: windows-latest
@@ -30,7 +58,7 @@ jobs:
         pip install -U pytest
         pip install -U Selenium
         pip install pytest-html
-        # if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        #if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
