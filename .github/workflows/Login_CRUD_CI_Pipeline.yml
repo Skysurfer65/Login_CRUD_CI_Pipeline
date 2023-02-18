@@ -41,8 +41,6 @@ jobs:
   Selenium_run_job:
     name: Selenium run
 
-  build:
-
     runs-on: windows-latest
 
     steps:
