@@ -143,7 +143,7 @@ def test_8_admin_update():
     WebDriverWait(driver_chrome, 2).until(EC.alert_is_present())
     alert.send_keys('newadmin1')
     alert.accept()
-    # Refreash webpage
+    # Refresh webpage
     driver_chrome.refresh()
     driver_chrome.find_element(By.ID, "displayDB").click()
     user_id_2 = driver_chrome.find_element(By.XPATH, '//*[@id="tableDB"]/tr[4]/td[2]')

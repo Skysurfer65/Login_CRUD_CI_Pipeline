@@ -183,6 +183,20 @@ function getUsers(){
 }
 
 /**
+ * @function getNewAdmin
+ * @description Experimental function for Selenium (måste köras med js executor)
+ * @returns string variable in local storage
+ */
+function getNewAdmin(){
+    if (localStorage.getItem("newAdminID") === null) {
+        adminID = "admin";
+        } else {
+            adminID = localStorage.getItem("newAdminID");
+        }
+    return adminID
+}
+
+/**
  * @function deleteEverythingSelenium
  * @description Experimental function for Selenium (måste köras med js executor)
  */

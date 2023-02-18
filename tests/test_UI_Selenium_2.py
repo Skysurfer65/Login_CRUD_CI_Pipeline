@@ -28,7 +28,8 @@ LOGIN_HTML = os.getcwd() + "//" + "..//src//html/index.html"
 # Instance of help classes
 my = Assertions()
 find = Locators()
-func = Functions()
+func = Functions() 
+#source "venv/Scripts/activate"             
 ####################################################################################################
 
 # Setup for webdrivers, scope set to class
@@ -66,7 +67,7 @@ class Testcase1(BasicTest):
     # Function for development
     def to_find_driver_functions(self):
         # To help IDE find type of driver
-        driver : webdriver.Edge = self.driver 
+        driver : webdriver.Edge = self.driver
      
     
     def test_1_source_found(self):
@@ -115,6 +116,7 @@ class Testcase2(BasicTest):
         self.delete_everything_selenium()
         self.function_teardown()
 
+
 #Testcase-3-Logins-good-and-bad----------------------------------------------------------------------
 class Testcase3(BasicTest):
     # Login good users
@@ -138,7 +140,7 @@ class Testcase3(BasicTest):
     def test_2_login_good_users_with_bad_pass(self):
         # Arrange
         self.function_setup()
-        print('Good users with bad pass login')
+        print('Good users with bad pass login')   
         # Goto create user and add users
         self.driver.find_element(*find.CREATE_OR_LOGIN).click()
         func.create_or_login_users(self.driver, good_users, good_passwords)
@@ -173,12 +175,183 @@ class Testcase3(BasicTest):
 
     # Three bad login attempts
     def test_3_bad_login_attempts(self):
-        pass  
+        # Arrange
+        self.function_setup()
+        print('Users three bad login attempts')
+        three_bad_passwords = bad_passwords[0:3]
+        good_user_times_3 = [good_users[0], good_users[0], good_users[0]]
+        # Goto create user and add users
+        self.driver.find_element(*find.CREATE_OR_LOGIN).click()
+        func.create_or_login_users(self.driver, good_users, good_passwords)
+        # Act, goto login and login
+        self.driver.find_element(*find.CREATE_OR_LOGIN).click()
+        text, success = func.create_or_login_users(self.driver, good_user_times_3, three_bad_passwords)
+        # Assert
+        my.boolean_assert(not success, text)
+        print(text)
+        # Check DB minus one
+        users_data = func.get_users(self.driver)
+        my.assert_equal(len(good_users) -1, len(users_data), "Checking list good_users against usersDB")
+        print(f'{good_users[0]} deleted from database!')
+        self.delete_everything_selenium()
+        self.function_teardown()
+
 
 #Testcase-4-Admin-and-CRUD-functions-----------------------------------------------------------------
 class Testcase4(BasicTest):
     # Test admin page
-    #source "venv/Scripts/activate"
-    pass   
+    def test_1_login_as_admin(self):
+        # Arrange
+        self.function_setup()
+        print('Login as admin')
+        # Goto create user and add users
+        self.driver.find_element(*find.CREATE_OR_LOGIN).click()
+        func.create_or_login_users(self.driver, good_users, good_passwords)
+        # Act, goto login and login as admin, index 2 in good lists
+        self.driver.find_element(*find.CREATE_OR_LOGIN).click()
+        admin, password = [good_users[2]], [good_passwords[2]]
+        text, success = func.create_or_login_users(self.driver, admin, password)
+        # Assert, login success and page title is Admin
+        my.boolean_assert(success, text)
+        print('Login successful')
+        # Cleanup
+        self.delete_everything_selenium()
+        self.function_teardown()
+
+    def test_2_display_DB(self):
+        # Arrange
+        self.function_setup()
+        print('Display database')
+        # Goto create user and add users
+        self.driver.find_element(*find.CREATE_OR_LOGIN).click()
+        func.create_or_login_users(self.driver, good_users, good_passwords)
+        # Act, goto login and login as admin
+        self.driver.find_element(*find.CREATE_OR_LOGIN).click()
+        func.login_as_admin(self.driver)
+        # Display database
+        self.driver.find_element(*find.DISPLAY_DB).click()
+        # Assert
+        database_name = self.driver.find_element(*find.USER_ID_2)
+        my.assert_equal('admin', database_name.text, 'Pagelist not showing correct user name')
+        print('Pagelist of database displayed')
+        # Cleanup
+        self.driver.find_element(*find.LOGOUT).click()
+        self.delete_everything_selenium()
+        self.function_teardown()
+
+    def test_3_update_admin(self):
+        # Arrange
+        self.function_setup()
+        print('Update admin')
+        # Goto create user and add users
+        self.driver.find_element(*find.CREATE_OR_LOGIN).click()
+        func.create_or_login_users(self.driver, good_users, good_passwords)
+        # Act, goto login and login as admin
+        self.driver.find_element(*find.CREATE_OR_LOGIN).click()
+        func.login_as_admin(self.driver)
+        # Update admin user name (user ID)
+        self.driver.find_element(*find.UPDATE_ENTRY).click()
+        alert = self.driver.switch_to.alert
+        alert.send_keys('2') # Choose entry to update
+        alert.accept()
+        alert.send_keys('User ID') # Choose field to update
+        alert.accept()
+        alert.send_keys('newadmin1') # Set new admin user ID
+        alert.accept()
+        # Refresh page and dispay DB
+        self.driver.refresh()
+        self.driver.find_element(*find.DISPLAY_DB).click()
+        # Assert
+        database_name = self.driver.find_element(*find.USER_ID_2)
+        my.assert_equal('newadmin1', database_name.text, 'Pagelist not showing updated user name')
+        print('Pagelist updated')
+        # Check local storage
+        self.driver.find_element(*find.LOGOUT).click()
+        new_DB_name = func.get_new_admin_ID(self.driver)
+        my.assert_equal('newadmin1', new_DB_name, 'Database not showing updated user name')
+        print('Database updated')
+        # Cleanup
+        self.delete_everything_selenium()
+        self.function_teardown()
+
+    def test_4_admin_update_user(self):
+        # Arrange
+        self.function_setup()
+        print('Admin update user')
+        # Goto create user and add users
+        self.driver.find_element(*find.CREATE_OR_LOGIN).click()
+        func.create_or_login_users(self.driver, good_users, good_passwords)
+        # Act, goto login and login as admin
+        self.driver.find_element(*find.CREATE_OR_LOGIN).click()
+        func.login_as_admin(self.driver)
+        # Update admin user name (user ID)
+        self.driver.find_element(*find.UPDATE_ENTRY).click()
+        alert = self.driver.switch_to.alert
+        alert.send_keys('0') # Choose entry to update
+        alert.accept()
+        alert.send_keys('password') # Choose field to update
+        alert.accept()
+        alert.send_keys('Bax100#') # Set new user password
+        alert.accept()
+        # Refresh page and dispay DB
+        self.driver.refresh()
+        self.driver.find_element(*find.DISPLAY_DB).click()
+        # Assert
+        new_pass = self.driver.find_element(*find.USER_PASS_0)
+        my.assert_equal('Bax100#', new_pass.text, 'Database not showing updated password')
+        print('Database updated!')
+        # Cleanup
+        self.driver.find_element(*find.LOGOUT).click()
+        self.delete_everything_selenium()
+        self.function_teardown()
+
+    def test_5_admin_delete_user(self):
+        # Arrange
+        self.function_setup()
+        print('Admin delete user')
+        # Goto create user and add users
+        self.driver.find_element(*find.CREATE_OR_LOGIN).click()
+        func.create_or_login_users(self.driver, good_users, good_passwords)
+        # Goto login and login as admin
+        self.driver.find_element(*find.CREATE_OR_LOGIN).click()
+        func.login_as_admin(self.driver)
+        # Delete user
+        self.driver.find_element(*find.DELETE_ENTRY).click()
+        alert = self.driver.switch_to.alert
+        alert.send_keys('5') # Choose entry to delete
+        alert.accept()
+        # Assert
+        # Goto index page and check DB minus one
+        self.driver.find_element(*find.LOGOUT).click()
+        users_data = func.get_users(self.driver)
+        my.assert_equal(len(good_users) -1, len(users_data), "Checking list good_users against usersDB")
+        print(f'{good_users[5]} deleted from database!')
+        # Cleanup
+        self.delete_everything_selenium()
+        self.function_teardown()
+
+    def test_6_admin_delete_all(self):
+        # Arrange
+        self.function_setup()
+        print('Admin delete all')
+        # Goto create user and add users
+        self.driver.find_element(*find.CREATE_OR_LOGIN).click()
+        func.create_or_login_users(self.driver, good_users, good_passwords)
+        # Goto login and login as admin
+        self.driver.find_element(*find.CREATE_OR_LOGIN).click()
+        func.login_as_admin(self.driver)
+        # Delete all
+        self.driver.find_element(*find.DELETE_ALL).click()
+        alert = self.driver.switch_to.alert
+        alert.accept()
+        # Assert
+        # Goto index page and check DB empty
+        self.driver.find_element(*find.LOGOUT).click()
+        users_data = func.get_users(self.driver)
+        my.assert_equal(0, len(users_data), "Checking database empty")
+        print('Database empty!')
+        # Cleanup
+        self.delete_everything_selenium()
+        self.function_teardown()  
 
 
