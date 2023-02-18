@@ -33,7 +33,7 @@ func = Functions()
 ####################################################################################################
 
 # Setup for webdrivers, scope set to class
-@pytest.fixture(params=["chrome"],scope="class")
+@pytest.fixture(params=["edge"],scope="class")
 def invoke_driver(request):
     print('Class setup')
     if request.param == "chrome":
