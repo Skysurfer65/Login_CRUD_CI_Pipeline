@@ -14,7 +14,7 @@ permissions:
 
 jobs:
 
-  JEST_unittests:
+  JEST_unittests_job:
     name: JEST unittests
 
   build:
@@ -38,9 +38,9 @@ jobs:
       # Coverage added
     - run: npm test -- --coverage
 
-  Selenium_run:
+  Selenium_run_job:
     name: Selenium run
-    
+
   build:
 
     runs-on: windows-latest
