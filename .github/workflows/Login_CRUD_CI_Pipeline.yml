@@ -17,8 +17,6 @@ jobs:
   JEST_unittests_job:
     name: JEST unittests
 
-  build:
-
     runs-on: ubuntu-latest
 
     strategy:
