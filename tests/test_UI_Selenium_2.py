@@ -12,7 +12,7 @@ import pytest_html
 # Python
 import os
 import json
-from time import sleep
+#from time import sleep
 # Local
 from ass_loc_func_Selenium import Assertions, Locators, Functions
 
@@ -29,7 +29,7 @@ LOGIN_HTML = os.getcwd() + "//" + "..//src//html/index.html"
 my = Assertions()
 find = Locators()
 func = Functions() 
-#source "venv/Scripts/activate"             
+# source "venv/Scripts/activate"             
 ####################################################################################################
 
 # Setup for webdrivers, scope set to class
