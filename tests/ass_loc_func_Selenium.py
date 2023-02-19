@@ -2,7 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import TimeoutException, UnexpectedAlertPresentException, NoSuchElementException, NoAlertPresentException
 from selenium.webdriver.support import expected_conditions as EC
-import pytest_check as check
+
 import json
 
 class Assertions:
@@ -11,15 +11,9 @@ class Assertions:
 
     def assert_not_equal(self,expected, actual, message):
         assert expected != actual, message
-    
-    def check_not_equal(self, expected, actual, message):
-        check.not_equal(expected, actual, message)
 
     def boolean_assert(self, value, message):
         assert value, message
-
-    def boolean_check(self, value, message):
-        check.is_true(value, message)
 
 
 class Locators:
