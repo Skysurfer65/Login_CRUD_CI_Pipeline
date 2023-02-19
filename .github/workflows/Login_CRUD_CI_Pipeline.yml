@@ -13,11 +13,9 @@ permissions:
   contents: read
 
 jobs:
-  build:
-    # Setup paths for output etc.
 
   JEST_unittests:
-    needs: [build]
+    
     name: JEST unittests
 
     runs-on: ubuntu-latest
@@ -40,7 +38,7 @@ jobs:
     - run: npm test -- --coverage
 
   Selenium_run:
-    needs: [build]
+  
     name: Selenium run
 
     runs-on: windows-latest
