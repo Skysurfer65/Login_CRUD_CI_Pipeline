@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import TimeoutException, UnexpectedAlertPresentException, NoSuchElementException, NoAlertPresentException
 from selenium.webdriver.support import expected_conditions as EC
+import pytest_check as check
 import json
 
 class Assertions:
@@ -11,11 +12,19 @@ class Assertions:
     def assert_not_equal(self,expected, actual, message):
         assert expected != actual, message
     
+    def check_not_equal(self, expected, actual, message):
+        check.not_equal(expected, actual, message)
+
     def boolean_assert(self, value, message):
         assert value, message
 
+    def boolean_check(self, value, message):
+        check.is_true(value, message)
+
+
 class Locators:
     LOGIN = (By.LINK_TEXT, 'Login')
+    HEADER = (By.ID, 'header')
     CREATE = (By.CSS_SELECTOR, '[value="CREATE"]')
     ACTION_BUTTON = (By.ID, 'actionButton')
     CREATE_OR_LOGIN = (By.ID, 'createOrLogin')
@@ -32,8 +41,26 @@ class Locators:
     LOGOUT = (By.ID, 'logout')
     OUTPUT_1 = (By.ID, 'output1')
 
-class Functions:    
-    def create_or_login_users(self, object, users, passwords):
+class Functions:
+    def goto_create(self, object):
+        driver = object
+        loc = Locators()
+        header = driver.find_element(*loc.HEADER)
+        if header.text == 'Login':
+            driver.find_element(*loc.CREATE_OR_LOGIN).click()
+        else:
+            pass
+        
+    def goto_login(self, object):
+        driver = object
+        loc = Locators()
+        header = driver.find_element(*loc.HEADER)
+        if header.text == 'Create Account':
+            driver.find_element(*loc.CREATE_OR_LOGIN).click()
+        else:
+            pass
+
+    def create_or_login_users_Original(self, object, users, passwords):
         driver = object
         loc = Locators()
         text = ''
@@ -63,10 +90,12 @@ class Functions:
                 continue
         return text, success
     
-    def create_or_login_users_WIP(self, object, users, passwords):
+    
+    def create_or_login_users(self, object, users, passwords):
         driver = object
         loc = Locators()
-        text = ''
+        bad_users_text = ''
+        good_users_text = ''
         success = False
         for i in range(len(users)):
             driver.find_element(*loc.RESET).click()
@@ -75,47 +104,25 @@ class Functions:
             # Set password
             driver.find_element(*loc.PASSWORD).send_keys(passwords[i])
             # Create or login
-            driver.find_element(*loc.ACTION_BUTTON).click()
-            if driver.find_element(*loc.OUTPUT_1):
-                # If success
-                text_frame = driver.find_element(*loc.OUTPUT_1).get_attribute('innerHTML')
-            elif not driver.find_element(*loc.OUTPUT_1) :
-                alert = driver.switch_to.alert
-                alert.accept()
-                text += f'Bad user: {users[i]}, or bad pass: {passwords[i]}\n'
-            else:
-                page_title = driver.title
-                driver.find_element(*loc.LOGOUT).click()
-  
-            '''
             try:
-                
-                WebDriverWait(driver, 0).until(EC.presence_of_element_located(By.ID, 'output1'))
-                # If success
-                text_frame = driver.find_element(*loc.OUTPUT_1).get_attribute('innerHTML')
-            except UnexpectedAlertPresentException:
+                driver.find_element(*loc.ACTION_BUTTON).click()
+                WebDriverWait(driver, 0).until(EC.alert_is_present())
                 alert = driver.switch_to.alert
                 alert.accept()
-            except TimeoutError:
-                pass   
-                
-            except Exception as e: 
-                
-                if e == UnexpectedAlertPresentException: # Something went wrong
-                    alert = driver.switch_to.alert
-                    alert.accept()
-                    text += f'Bad user: {users[i]}, or bad pass: {passwords[i]}\n'
-                elif e.__class__ == TimeoutException: # Admin page
-                    page_title = driver.title
+                bad_users_text += f'Bad user: {users[i]}, or bad pass: {passwords[i]}\n'
+            
+            except TimeoutException:
+                if driver.find_elements(*loc.OUTPUT_1):
+                    text_frame = driver.find_element(*loc.OUTPUT_1).get_attribute('innerHTML')
+                    good_users_text += f'Good user: {users[i]}, with good pass: {passwords[i]}\n'
+                elif driver.title == 'Admin':
                     driver.find_element(*loc.LOGOUT).click()
-                else: # Some other Exception
-                    print(e)
-                '''
-                
+                    good_users_text += f'Good user: {users[i]}, with good pass: {passwords[i]}\n'
 
-                #if ('successfully' or 'CORRECT' in text_frame) or ('Admin' in page_title):
-                #success = True             
-        return text, success
+                if ('successfully' or 'CORRECT' in text_frame) or ('Admin' in driver.title):
+                    success = True    
+        return bad_users_text, success, good_users_text
+        
 
     def login_as_admin(self, object):
         driver = object
