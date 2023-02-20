@@ -30,11 +30,11 @@ my = Assertions()
 find = Locators()
 func = Functions() 
 # source "venv/Scripts/activate" 
-# pytest -rA --capture sys --verbose --html=tests/pytest_selenium_test_report.html tests/test_UI_Selenium_2.py           
+# pytest -rA --capture sys --verbose --html=tests/test_reports/selenium_test_report.html tests/test_UI_Selenium_2.py           
 ####################################################################################################
 
 # Setup for webdrivers, scope set to class
-@pytest.fixture(params=["edge", "chrome"],scope="class")
+@pytest.fixture(params=['chrome', 'edge'],scope="class")
 def invoke_driver(request):
     print('Class setup')
     if request.param == "chrome":
@@ -64,9 +64,9 @@ class BasicTest:
         print('Cleanup')
         self.driver.execute_script('deleteEverythingSelenium()')
     
-#Testcase-1-Basic-startup-and-deletes---------------------------------------------------------------
+#Testcase-1-Basic-startup-and-DB-checks--------------------------------------------------------------
 class Testcase1(BasicTest):
-    
+ 
     def test_1_source_found(self):
         self.function_setup()
         print('Check HTML source')
@@ -118,7 +118,7 @@ class Testcase2(BasicTest):
         self.function_teardown()
         
 
-#Testcase-3-Logins-good-and-bad----------------------------------------------------------------------
+#Testcase-3-Logins-good-and-bad-----------------------------------------------------------------------
 class Testcase3(BasicTest):
 
     # Login good users
@@ -208,7 +208,7 @@ class Testcase3(BasicTest):
         self.function_teardown()
 
 
-#Testcase-4-Admin-and-CRUD-functions-----------------------------------------------------------------
+#Testcase-4-Admin-and-CRUD-functions------------------------------------------------------------------
 class Testcase4(BasicTest):
     # Test admin page
     def test_1_login_as_admin(self):

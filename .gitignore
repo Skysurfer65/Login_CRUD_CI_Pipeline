@@ -1,0 +1,8 @@
+node_modules
+jsdoc
+coverage
+.pytest_cache
+tests/__pycache__
+venv
+test_reports
+test_UI_Selenium.py
