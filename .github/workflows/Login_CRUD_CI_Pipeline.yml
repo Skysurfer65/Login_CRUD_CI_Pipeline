@@ -1,5 +1,6 @@
 # The whole suite will run tests on backend and frontend and analyze code quality
 name: Login_CRUD_CI_Pipeline
+run-name: Run by ${{ github.actor }}
 
 # Main protected by pull request
 on:
@@ -8,6 +9,7 @@ on:
   pull_request:
     branches: [ "main" ]
 
+# For now read only
 permissions:
   contents: read
 
@@ -29,6 +31,7 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
+        # Make cache of npm ci
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present
@@ -39,9 +42,11 @@ jobs:
   Selenium_run:
     needs: [JEST_unittests]
   
-    name: Selenium run
-
-    runs-on: windows-latest
+    name: Selenium tests Chrome/Edge on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
     - uses: actions/checkout@v3
