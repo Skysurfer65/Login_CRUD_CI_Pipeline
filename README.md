@@ -1,4 +1,4 @@
-# Login_CRUD_CI_Pipeline WIP
+# Login_CRUD_CI_Pipeline
 ## Login with admin CRUD. Javascript and HTML. Tested with JEST and Selenium in GitHub Actions.
 
 # Continous Integration
