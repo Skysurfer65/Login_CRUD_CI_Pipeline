@@ -17,7 +17,7 @@ jobs:
   # Unittests on javascript backend in three different Node environments
   Backend_JEST_unittests:
     
-    name: Unittests on ${{ matrix.node-version }}
+    name: Unittests on Node ${{ matrix.node-version }}
     # OS not relevant in this test, use fastest
     runs-on: ubuntu-latest
     
@@ -54,6 +54,8 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: "3.10"
+        # caching pip dependencies
+        cache: 'pip' 
         
     - name: Install dependencies
       run: |
