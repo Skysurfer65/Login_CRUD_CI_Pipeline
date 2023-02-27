@@ -30,6 +30,7 @@ my = Assertions()
 find = Locators()
 func = Functions() 
 # source "venv/Scripts/activate" 
+# Try HTML report
 # pytest -rA --capture sys --verbose --html=tests/test_reports/selenium_test_report.html tests/test_UI_Selenium_2.py           
 ####################################################################################################
 
