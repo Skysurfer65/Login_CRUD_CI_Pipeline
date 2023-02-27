@@ -83,7 +83,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       
   Deploy:
-    needs: [Selenium_run]
+    needs: [Selenium_run, Code_quality_check]
     
     name: Deploy Login_CRUD
     
