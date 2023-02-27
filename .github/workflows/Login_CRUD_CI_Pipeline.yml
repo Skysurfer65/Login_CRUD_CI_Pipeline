@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   # Unittests on javascript backend in three different Node environments
-  JEST_unittests:
+  Backend_JEST_unittests:
     
     name: JEST unittests
     # OS not relevant in this test, use fastest
@@ -39,8 +39,8 @@ jobs:
     - run: npm test -- --coverage
 
   # Frontend tests with Chrome and Edge
-  Selenium_run:
-    needs: [JEST_unittests]
+  Frontend_Selenium_run:
+    needs: [Backend_JEST_unittests]
   
     name: Chrome/Edge on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -69,7 +69,7 @@ jobs:
         pytest -rA --verbose tests/test_UI_Selenium_2.py
   
   Code_quality_check:
-    needs: [JEST_unittests]
+    needs: [Backend_JEST_unittests]
   
     name: Code quality check
 
@@ -89,7 +89,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       
   Deploy:
-    needs: [Selenium_run, Code_quality_check]
+    needs: [Frontend_Selenium_run, Code_quality_check]
     
     name: Deploy Login_CRUD
     
