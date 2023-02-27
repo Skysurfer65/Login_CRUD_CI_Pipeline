@@ -40,7 +40,7 @@ jobs:
 
   # Frontend tests with Chrome and Edge
   Frontend_Selenium_run:
-    needs: [JEST_unittests]
+    needs: [Backend_JEST_unittests]
   
     name: Chrome/Edge on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -69,7 +69,7 @@ jobs:
         pytest -rA --verbose tests/test_UI_Selenium_2.py
   
   Code_quality_check:
-    needs: [JEST_unittests]
+    needs: [Backend_JEST_unittests]
   
     name: Code quality check
 
