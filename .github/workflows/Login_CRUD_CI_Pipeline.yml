@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   # Unittests on javascript backend in three different Node environments
-  JEST_unittests:
+  Backend_JEST_unittests:
     
     name: Unittests on ${{ matrix.node-version }}
     # OS not relevant in this test, use fastest
