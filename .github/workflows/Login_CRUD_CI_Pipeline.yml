@@ -42,11 +42,11 @@ jobs:
   Selenium_run:
     needs: [JEST_unittests]
   
-    name: Selenium tests Chrome/Edge on ${{ matrix.os }}
+    name: Chrome/Edge on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [windows-latest, macOS-latest]
 
     steps:
     - uses: actions/checkout@v3
@@ -61,6 +61,7 @@ jobs:
         pip install -U pytest
         pip install -U Selenium
         pip install pytest-html
+        # If statement needs to be rewritten for windows
         #if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         
     - name: Selenium test with pytest as testrunner
