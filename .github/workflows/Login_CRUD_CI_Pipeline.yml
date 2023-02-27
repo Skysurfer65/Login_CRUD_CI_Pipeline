@@ -17,10 +17,10 @@ jobs:
   # Unittests on javascript backend in three different Node environments
   JEST_unittests:
     
-    name: Backend JEST unittests
+    name: Unittests on ${{ matrix.node-version }}
     # OS not relevant in this test, use fastest
     runs-on: ubuntu-latest
-
+    
     strategy:
       matrix:
         node-version: [14.x, 16.x, 18.x]
