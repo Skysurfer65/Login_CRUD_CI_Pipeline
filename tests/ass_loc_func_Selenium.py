@@ -1,8 +1,9 @@
+# Selenium
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import TimeoutException, UnexpectedAlertPresentException, NoSuchElementException, NoAlertPresentException
 from selenium.webdriver.support import expected_conditions as EC
-
+# Python
 import json
 
 class Assertions:
@@ -122,12 +123,14 @@ class Functions:
         driver = object
         loc = Locators()
         driver.find_element(*loc.RESET).click()
+        # Only for testdata good_users and good_passwords
         driver.find_element(*loc.USER_ID).send_keys('admin')
         driver.find_element(*loc.PASSWORD).send_keys('Bax3%')
         driver.find_element(*loc.ACTION_BUTTON).click()
 
     def get_users(self, object):
         driver = object
+        # Only when active page has script
         users_json = driver.execute_script('return getUsers()')
         user_data = json.loads(users_json)
         return user_data
