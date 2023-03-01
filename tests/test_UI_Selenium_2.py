@@ -1,18 +1,11 @@
 # Selenium
 from selenium import webdriver
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
 # Pytest
 import pytest
 import pytest_html
 # Python
 import os
-import json
-#from time import sleep
+
 # Local
 from ass_loc_func_Selenium import Assertions, Locators, Functions
 
@@ -28,9 +21,10 @@ LOGIN_HTML = os.getcwd() + "//" + "..//src//html/index.html"
 # Instance of help classes
 my = Assertions()
 find = Locators()
-func = Functions() 
+func = Functions()
+# To start virtual environment: 
 # source "venv/Scripts/activate" 
-# Try HTML report
+# Try HTML report:
 # pytest -rA --capture sys --verbose --html=tests/test_reports/selenium_test_report.html tests/test_UI_Selenium_2.py           
 ####################################################################################################
 
@@ -71,11 +65,13 @@ class Testcase1(BasicTest):
     def test_1_source_found(self):
         self.function_setup()
         print('Check HTML source')
+        # Assert
         my.boolean_assert(self.driver.page_source, 'No HTML source')         
         self.function_teardown()
 
     def test_2_correct_url(self):
-        self.function_setup()        
+        self.function_setup()
+        # Assert       
         my.assert_equal(LOGIN_TITLE, self.driver.title, f'Title: {LOGIN_TITLE} not found')
         print(self.driver.title)
         self.function_teardown()
@@ -84,6 +80,7 @@ class Testcase1(BasicTest):
         self.function_setup()
         print('Check empty database')
         user_data = func.get_users(self.driver)
+        # Assert
         my.assert_equal(0, len(user_data), "Users array not empty")
         self.function_teardown()
 
@@ -113,6 +110,7 @@ class Testcase2(BasicTest):
         self.function_setup()
         print('Check DB from test_1_create_users')
         user_data = func.get_users(self.driver)
+        # Assert
         my.assert_equal(len(good_users), len(user_data), "Testdata and database not equal")
         # Cleanup
         self.delete_everything_selenium()
@@ -237,10 +235,10 @@ class Testcase4(BasicTest):
         # Goto create user and add users
         func.goto_create(self.driver)
         func.create_or_login_users(self.driver, good_users, good_passwords)
-        # Act, goto login and login as admin
+        # Goto login and login as admin
         func.goto_login(self.driver)
         func.login_as_admin(self.driver)
-        # Display database
+        # Act, display database
         self.driver.find_element(*find.DISPLAY_DB).click()
         # Assert
         database_name = self.driver.find_element(*find.USER_ID_2)
@@ -258,10 +256,10 @@ class Testcase4(BasicTest):
         # Goto create user and add users
         func.goto_create(self.driver)
         func.create_or_login_users(self.driver, good_users, good_passwords)
-        # Act, goto login and login as admin
+        # Goto login and login as admin
         func.goto_login(self.driver)
         func.login_as_admin(self.driver)
-        # Update admin user name (user ID)
+        # Act, update admin user name (user ID)
         self.driver.find_element(*find.UPDATE_ENTRY).click()
         alert = self.driver.switch_to.alert
         alert.send_keys('2') # Choose entry to update
@@ -293,10 +291,10 @@ class Testcase4(BasicTest):
         # Goto create user and add users
         func.goto_create(self.driver)
         func.create_or_login_users(self.driver, good_users, good_passwords)
-        # Act, goto login and login as admin
+        # Goto login and login as admin
         func.goto_login(self.driver)
         func.login_as_admin(self.driver)
-        # Update someones username (user ID)
+        # Act, update someones username (user ID)
         self.driver.find_element(*find.UPDATE_ENTRY).click()
         alert = self.driver.switch_to.alert
         alert.send_keys('0') # Choose entry to update
@@ -327,7 +325,7 @@ class Testcase4(BasicTest):
         # Goto login and login as admin
         func.goto_login(self.driver)
         func.login_as_admin(self.driver)
-        # Delete user
+        # Act, Delete user
         self.driver.find_element(*find.DELETE_ENTRY).click()
         alert = self.driver.switch_to.alert
         alert.send_keys('5') # Choose entry to delete
@@ -352,7 +350,7 @@ class Testcase4(BasicTest):
         # Goto login and login as admin
         func.goto_login(self.driver)
         func.login_as_admin(self.driver)
-        # Delete all
+        # Act, Delete all
         self.driver.find_element(*find.DELETE_ALL).click()
         alert = self.driver.switch_to.alert
         alert.accept()
@@ -360,7 +358,7 @@ class Testcase4(BasicTest):
         # Goto index page and check DB empty
         self.driver.find_element(*find.LOGOUT).click()
         users_data = func.get_users(self.driver)
-        my.assert_equal(0, len(users_data), "Checking database empty")
+        my.assert_equal(0, len(users_data), "Database NOT empty")
         print('Database empty!')
         # Cleanup
         self.delete_everything_selenium()
