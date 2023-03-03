@@ -56,7 +56,7 @@ class Functions:
         else:
             pass
 
-    def create_or_login_users(self, object, users, passwords):
+    def create_or_login_users_WIP(self, object, users, passwords):
         # Experimental for use if localhost webpage (faster)
         driver = object
         loc = Locators()
@@ -106,7 +106,7 @@ class Functions:
         return bad_users_text, success, good_users_text
     
     
-    def create_or_login_users_Original(self, object, users, passwords):
+    def create_or_login_users(self, object, users, passwords):
         driver = object
         loc = Locators()
         bad_users_text = ''
@@ -119,8 +119,8 @@ class Functions:
             # Set password
             driver.find_element(*loc.PASSWORD).send_keys(passwords[i])
             # Create or login
-            try:
-                driver.find_element(*loc.ACTION_BUTTON).click()
+            driver.find_element(*loc.ACTION_BUTTON).click()
+            try:      
                 WebDriverWait(driver, 0).until(EC.alert_is_present())
                 alert = driver.switch_to.alert
                 alert.accept()
