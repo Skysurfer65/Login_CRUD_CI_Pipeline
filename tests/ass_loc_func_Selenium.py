@@ -1,7 +1,8 @@
 # Selenium
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.common.exceptions import TimeoutException, UnexpectedAlertPresentException, NoSuchElementException, NoAlertPresentException
+from selenium.common.exceptions import TimeoutException 
+from selenium.common.exceptions import UnexpectedAlertPresentException, NoSuchElementException, NoAlertPresentException
 from selenium.webdriver.support import expected_conditions as EC
 # Python
 import json
@@ -55,10 +56,12 @@ class Functions:
         else:
             pass
 
-    def create_or_login_users_Original(self, object, users, passwords):
+    def create_or_login_users(self, object, users, passwords):
+        # Experimental for use if localhost webpage (faster)
         driver = object
         loc = Locators()
-        text = ''
+        bad_users_text = ''
+        good_users_text = ''
         success = False
         for i in range(len(users)):
             driver.find_element(*loc.RESET).click()
@@ -68,25 +71,42 @@ class Functions:
             driver.find_element(*loc.PASSWORD).send_keys(passwords[i])
             # Create
             driver.find_element(*loc.ACTION_BUTTON).click() 
-            try:
-                WebDriverWait(driver, 0).until(EC.alert_is_present())
-                alert = driver.switch_to.alert
-                alert.accept()
-                text += f'Bad user: {users[i]}, or bad pass: {passwords[i]}\n'
+            try:  
+                if driver.find_elements(*loc.OUTPUT_1):
+                    text_frame = driver.find_element(*loc.OUTPUT_1).get_attribute('innerHTML')
+                    good_users_text += f'Good user: {users[i]}, with good pass: {passwords[i]}\n'
+              
+                elif driver.title == 'Admin':
+                    page_title = driver.title
+                    driver.find_element(*loc.LOGOUT).click()
+                    good_users_text += f'Good user: {users[i]}, with good pass: {passwords[i]}\n'
+   
+                else: 
+                    alert = driver.switch_to.alert
+                    alert.accept()
+
+                if ('successfully' or 'CORRECT' in text_frame) or ('Admin' in page_title):
+                    success = True
+            except Exception:
+                bad_users_text += f'Bad user: {users[i]}, or bad pass: {passwords[i]}\n'
+   
+            '''
             except TimeoutException:
                 try:
                     WebDriverWait(driver, 0).until(lambda d: d.find_element(*loc.OUTPUT_1))
                     text_frame = driver.find_element(*loc.OUTPUT_1).get_attribute('innerHTML')
+                    good_users_text += f'Good user: {users[i]}, with good pass: {passwords[i]}\n'
                 except TimeoutException:
                     page_title = driver.title
                     driver.find_element(*loc.LOGOUT).click()
+                    good_users_text += f'Good user: {users[i]}, with good pass: {passwords[i]}\n'
                 if ('successfully' or 'CORRECT' in text_frame) or ('Admin' in page_title):
                     success = True
-                continue
-        return text, success
+            '''
+        return bad_users_text, success, good_users_text
     
     
-    def create_or_login_users(self, object, users, passwords):
+    def create_or_login_users_Original(self, object, users, passwords):
         driver = object
         loc = Locators()
         bad_users_text = ''

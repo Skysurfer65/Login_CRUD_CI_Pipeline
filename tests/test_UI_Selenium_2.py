@@ -22,6 +22,7 @@ LOGIN_HTML = os.getcwd() + "//" + "..//src//html/index.html"
 my = Assertions()
 find = Locators()
 func = Functions()
+# In VSC:
 # To start virtual environment: 
 # source "venv/Scripts/activate" 
 # Try HTML report:
