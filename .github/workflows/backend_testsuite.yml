@@ -1,0 +1,41 @@
+# The whole suite will run tests on backend and frontend and analyze code quality
+name: backend_testsuite
+run-name: Run by ${{ github.actor }}
+
+on:
+  push:
+    branches: [ "devBranch" ]
+
+
+# For now read only
+permissions:
+  contents: read
+
+jobs:
+  # Unittests on javascript backend in three different Node environments
+  Backend_JEST_unittests:
+    
+    name: Unittests on Node ${{ matrix.node-version }}
+    # OS not relevant in this test, use fastest
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        # Make cache of npm ci
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build --if-present
+      # Coverage added
+    - run: npm test -- --coverage
+
+
+
+

@@ -17,7 +17,7 @@ Testing application on Chrome and Edge browsers.<br/>
 test_UI_Selenium_2.py is the valid script written in python and validated by **pytest**<br/>
 Run froom root with **pytest -rA --verbose tests/test_UI_Selenium_2.py**<br/>
 Run single tests **pytest -rA --verbose tests/test_UI_Selenium_2.py::Testcase2::test_1_create_users**<br/>
-If you want a HTML test report:<br/> 
+If you want a HTML test report, this has to be done locally:<br/> 
 **pytest -rA --capture sys --verbose --html=tests/test_reports/selenium_test_report.html tests/test_UI_Selenium_2.py** 
 
 # Author

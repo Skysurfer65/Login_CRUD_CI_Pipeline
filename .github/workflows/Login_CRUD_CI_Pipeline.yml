@@ -4,8 +4,6 @@ run-name: Run by ${{ github.actor }}
 
 # Main protected by pull request
 on:
-  push:
-    branches: [ "devBranch" ]
   pull_request:
     branches: [ "main" ]
 
