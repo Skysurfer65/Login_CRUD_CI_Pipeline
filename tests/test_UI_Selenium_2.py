@@ -1,5 +1,7 @@
 # Selenium
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service as ChromeService
 # Pytest
 import pytest
 import pytest_html
@@ -30,11 +32,13 @@ func = Functions()
 ####################################################################################################
 
 # Setup for webdrivers, scope set to class
-@pytest.fixture(params=['edge'],scope="class")
+@pytest.fixture(params=['chrome', 'edge'],scope="class")
 def invoke_driver(request):
     print('Class setup')
     if request.param == "chrome":
-        web_driver = webdriver.Chrome()
+        # web_driver = webdriver.Chrome()
+        service = ChromeService(executable_path=ChromeDriverManager().install())
+        web_driver = webdriver.Chrome(service=service)
     if request.param == "edge":
         web_driver = webdriver.Edge()
     request.cls.driver = web_driver
