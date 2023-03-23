@@ -63,7 +63,7 @@ class User{
         let specialCharacters = "!#$%&'()*+,-./:;<=>?@[]^_`{|}";
         let emptySpace = " ";
         let numbers = "1234567890";
-        let capitalLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        let capitalLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ";
             
         //Check if password is empty, null, undefined, NaN etc.
         if(!this.password) return false;
