@@ -37,6 +37,7 @@ def invoke_driver(request):
     print('Class setup')
     if request.param == "chrome":
         # web_driver = webdriver.Chrome()
+        # Webdriver-manager used with Chrome for correct driver version
         service = ChromeService(executable_path=ChromeDriverManager().install())
         web_driver = webdriver.Chrome(service=service)
     if request.param == "edge":
@@ -49,7 +50,7 @@ def invoke_driver(request):
 
 @pytest.mark.usefixtures("invoke_driver")
 class BasicTest:
-    # This is a parent class for setups/teardowns and 
+    # This is a parent class for setups/teardowns and
     # to be able to choose different drivers or no driver
     # for testcases/classes
     def function_setup(self):
